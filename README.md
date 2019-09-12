@@ -1,5 +1,5 @@
-# HTML5-Starter-Pack
-Starter pack for front-end developers. SCSS, Bootstrap, Gulp4, NPM, YARN, Webpack, Live reload, Iconfont, Sprites and other in one package
+# HTML5-Vue-Starter-Pack
+Starter pack for front-end developers. SCSS, Bootstrap, Gulp4, NPM, YARN, Vue.js, RollupJS, Live reload, Iconfont, Sprites and other in one package
 
 ## Requirements
 * [Node.js](https://nodejs.org) or [Yarn](https://yarnpkg.com)

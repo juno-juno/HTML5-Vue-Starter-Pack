@@ -1,6 +1,3 @@
-import Vue from 'vue';
-import Home from '../../templates/Home.vue';
-
 export default {
   init() {
 
@@ -11,7 +8,7 @@ export default {
 
     new Vue({
       el: '#only-homepage',
-      ...Home
+      template: '<h3>This is vue template</h3>'
     });
 
   },

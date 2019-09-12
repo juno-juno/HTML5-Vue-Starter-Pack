@@ -140,6 +140,14 @@ export const fonts = async () => {
     .pipe(server.stream());
 }
 
+// Vendor scripts
+export const vendorScripts = async () => {
+  return src([
+    './node_modules/vue/dist/vue.min.js'
+  ])
+    .pipe(dest('www/js/vendor'))
+}
+
 // Scripts
 export const scripts = async () => {
   const bundle = await rollup.rollup({
@@ -155,7 +163,7 @@ export const scripts = async () => {
         exclude: 'node_modules/**',
         runtimeHelpers: true,
       }),
-      PRODUCTION ? uglify() : ''
+      PRODUCTION ? uglify() : '',
     ]
   });
 
@@ -206,10 +214,10 @@ export const stream = done => {
 };
 
 // Development Task
-export const dev = series(clean, sprites, icons, parallel(styles, images, scripts, fonts), serve, watchForChanges);
+export const dev = series(clean, sprites, icons, vendorScripts, parallel(styles, images, scripts, fonts), serve, watchForChanges);
 
 // Production Task
-export const build = series(clean, sprites, icons, parallel(styles, images, scripts, fonts));
+export const build = series(clean, sprites, icons, vendorScripts, parallel(styles, images, scripts, fonts));
 
 // Default task
 export default dev;

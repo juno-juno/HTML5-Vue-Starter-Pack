@@ -1,6 +1,3 @@
-// import Vue from 'vue';
-// import Common from '../../templates/Common.vue';
-
 export default {
   init() {
 
@@ -12,9 +9,9 @@ export default {
     new Vue({
       el: '#app',
       data: {
-        message: 'Hello Vue!'
-      },
-      // ...Common
+        message: 'Hello Vue!',
+        seen: true
+      }
     });
 
   },

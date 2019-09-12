@@ -77,9 +77,9 @@
           {{ message }}
         </h1>
 
-        <div>
-          test
-        </div>
+        <span v-if="seen">Now you see me</span>
+
+        <div class="test">This is static text</div>
       </div>
 
       <!-- Vue Home element -->
@@ -88,7 +88,8 @@
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js" integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+    <script>window.Vue || document.write('<script src="js/vendor/vue.min.js"><\/script>')</script>
     <script src="js/bundle.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
