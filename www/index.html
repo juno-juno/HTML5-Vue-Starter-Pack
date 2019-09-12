@@ -71,23 +71,24 @@
         </div>
       </div>
 
+      <!-- Vue Common element -->
       <div id="app">
-        {{ message }}
+        <h1>
+          {{ message }}
+        </h1>
 
-        <!-- <span v-bind:title="message">
-          Hover your mouse over me for a few seconds
-          to see my dynamically bound title!
-        </span> -->
+        <div>
+          test
+        </div>
       </div>
 
-      <div id="only-homepage">
-        {{ helloHomepage }}
-        {{ loadMessage }}
-      </div>
+      <!-- Vue Home element -->
+      <div id="only-homepage"></div>
 
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="js/bundle.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->

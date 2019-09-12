@@ -1,21 +1,21 @@
-import Vue from 'vue';
-// import 'vue/dist/vue.runtime.esm'
+// import Vue from 'vue';
+// import Common from '../../templates/Common.vue';
 
 export default {
   init() {
 
-    // JavaScript to be fired on all pages
     document.documentElement.classList.remove('no-js');
     document.documentElement.classList.add('js');
 
     console.log('common -- init');
 
-    const app = new Vue({
+    new Vue({
       el: '#app',
       data: {
         message: 'Hello Vue!'
-      }
-    })
+      },
+      // ...Common
+    });
 
   },
   finalize() {

@@ -1,22 +1,23 @@
 import Vue from 'vue';
+import Home from '../../templates/Home.vue';
 
 export default {
   init() {
 
-    console.log('home -- init');
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+
+    console.log('Home -- init');
+
+    new Vue({
+      el: '#only-homepage',
+      ...Home
+    });
 
   },
   finalize() {
 
-    console.log('home -- finalize');
-
-    const app = new Vue({
-      el: '#only-homepage',
-      data: {
-        helloHomepage: 'Hello Homepage!',
-        loadMessage: 'You loaded this page on ' + new Date().toLocaleString()
-      }
-    })
+    console.log('Home -- finalize');
 
   },
 };

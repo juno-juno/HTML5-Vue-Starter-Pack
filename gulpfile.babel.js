@@ -35,6 +35,7 @@ import commonjs from "rollup-plugin-commonjs";
 import babel from 'rollup-plugin-babel';
 import { uglify } from "rollup-plugin-uglify";
 import replace from 'rollup-plugin-replace';
+import vue from 'rollup-plugin-vue';
 
 // Dev
 import browserSync from "browser-sync";
@@ -144,9 +145,7 @@ export const scripts = async () => {
   const bundle = await rollup.rollup({
     input: `${sources.scripts}`,
     plugins: [
-      alias({
-        'vue': require.resolve('vue/dist/vue.esm.js')
-      }),
+      vue(),
       replace({
         'process.env.NODE_ENV': JSON.stringify( 'production' )
       }),

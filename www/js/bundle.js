@@ -106,6 +106,43 @@ function () {
   return Router;
 }();
 
+// import Vue from 'vue';
+// import Common from '../../templates/Common.vue';
+var common = {
+  init: function init() {
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+    console.log('common -- init');
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      } // ...Common
+
+    });
+  },
+  finalize: function finalize() {
+    console.log('common -- finalize');
+  }
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+var defineProperty = _defineProperty;
+
 /*!
  * Vue.js v2.6.10
  * (c) 2014-2019 Evan You
@@ -4432,15 +4469,15 @@ function resolveModifiedOptions (Ctor) {
   return modified
 }
 
-function Vue (options) {
+function Vue$1 (options) {
   this._init(options);
 }
 
-initMixin(Vue);
-stateMixin(Vue);
-eventsMixin(Vue);
-lifecycleMixin(Vue);
-renderMixin(Vue);
+initMixin(Vue$1);
+stateMixin(Vue$1);
+eventsMixin(Vue$1);
+lifecycleMixin(Vue$1);
+renderMixin(Vue$1);
 
 /*  */
 
@@ -4769,13 +4806,13 @@ function initGlobalAPI (Vue) {
   initAssetRegisters(Vue);
 }
 
-initGlobalAPI(Vue);
+initGlobalAPI(Vue$1);
 
-Object.defineProperty(Vue.prototype, '$isServer', {
+Object.defineProperty(Vue$1.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Object.defineProperty(Vue.prototype, '$ssrContext', {
+Object.defineProperty(Vue$1.prototype, '$ssrContext', {
   get: function get () {
     /* istanbul ignore next */
     return this.$vnode && this.$vnode.ssrContext
@@ -4783,11 +4820,11 @@ Object.defineProperty(Vue.prototype, '$ssrContext', {
 });
 
 // expose FunctionalRenderContext for ssr runtime helper installation
-Object.defineProperty(Vue, 'FunctionalRenderContext', {
+Object.defineProperty(Vue$1, 'FunctionalRenderContext', {
   value: FunctionalRenderContext
 });
 
-Vue.version = '2.6.10';
+Vue$1.version = '2.6.10';
 
 /*  */
 
@@ -7565,21 +7602,21 @@ var platformComponents = {
 /*  */
 
 // install platform specific utils
-Vue.config.mustUseProp = mustUseProp;
-Vue.config.isReservedTag = isReservedTag;
-Vue.config.isReservedAttr = isReservedAttr;
-Vue.config.getTagNamespace = getTagNamespace;
-Vue.config.isUnknownElement = isUnknownElement;
+Vue$1.config.mustUseProp = mustUseProp;
+Vue$1.config.isReservedTag = isReservedTag;
+Vue$1.config.isReservedAttr = isReservedAttr;
+Vue$1.config.getTagNamespace = getTagNamespace;
+Vue$1.config.isUnknownElement = isUnknownElement;
 
 // install platform runtime directives & components
-extend(Vue.options.directives, platformDirectives);
-extend(Vue.options.components, platformComponents);
+extend(Vue$1.options.directives, platformDirectives);
+extend(Vue$1.options.components, platformComponents);
 
 // install platform patch function
-Vue.prototype.__patch__ = inBrowser ? patch : noop;
+Vue$1.prototype.__patch__ = inBrowser ? patch : noop;
 
 // public mount method
-Vue.prototype.$mount = function (
+Vue$1.prototype.$mount = function (
   el,
   hydrating
 ) {
@@ -7593,43 +7630,161 @@ if (inBrowser) {
   setTimeout(function () {
     if (config.devtools) {
       if (devtools) {
-        devtools.emit('init', Vue);
+        devtools.emit('init', Vue$1);
       }
     }
   }, 0);
 }
 
-var common = {
-  init: function init() {
-    // JavaScript to be fired on all pages
-    document.documentElement.classList.remove('no-js');
-    document.documentElement.classList.add('js');
-    console.log('common -- init');
-    var app = new Vue({
-      el: '#app',
-      data: {
-        message: 'Hello Vue!'
-      }
-    });
-  },
-  finalize: function finalize() {
-    console.log('common -- finalize');
+//
+//
+//
+//
+//
+//
+var script = {
+  data: {
+    message: 'Hello Home!'
   }
 };
 
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
+/* server only */
+, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  if (typeof shadowMode !== 'boolean') {
+    createInjectorSSR = createInjector;
+    createInjector = shadowMode;
+    shadowMode = false;
+  } // Vue.extend constructor export interop.
+
+
+  var options = typeof script === 'function' ? script.options : script; // render functions
+
+  if (template && template.render) {
+    options.render = template.render;
+    options.staticRenderFns = template.staticRenderFns;
+    options._compiled = true; // functional template
+
+    if (isFunctionalTemplate) {
+      options.functional = true;
+    }
+  } // scopedId
+
+
+  if (scopeId) {
+    options._scopeId = scopeId;
+  }
+
+  var hook;
+
+  if (moduleIdentifier) {
+    // server build
+    hook = function hook(context) {
+      // 2.3 injection
+      context = context || // cached call
+      this.$vnode && this.$vnode.ssrContext || // stateful
+      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
+      // 2.2 with runInNewContext: true
+
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+      } // inject component styles
+
+
+      if (style) {
+        style.call(this, createInjectorSSR(context));
+      } // register component module identifier for async chunk inference
+
+
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier);
+      }
+    }; // used by ssr in case component is cached and beforeCreate
+    // never gets called
+
+
+    options._ssrRegister = hook;
+  } else if (style) {
+    hook = shadowMode ? function () {
+      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
+    } : function (context) {
+      style.call(this, createInjector(context));
+    };
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // register for functional component in vue file
+      var originalRender = options.render;
+
+      options.render = function renderWithStyleInjection(h, context) {
+        hook.call(context);
+        return originalRender(h, context);
+      };
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate;
+      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    }
+  }
+
+  return script;
+}
+
+var normalizeComponent_1 = normalizeComponent;
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", [_c("h2", [_vm._v(_vm._s(_vm.message))])])
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var Home = normalizeComponent_1(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    undefined,
+    undefined
+  );
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 var home = {
   init: function init() {
-    console.log('home -- init');
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+    console.log('Home -- init');
+    new Vue$1(_objectSpread({
+      el: '#only-homepage'
+    }, Home));
   },
   finalize: function finalize() {
-    console.log('home -- finalize');
-    var app = new Vue({
-      el: '#only-homepage',
-      data: {
-        helloHomepage: 'Hello Homepage!',
-        loadMessage: 'You loaded this page on ' + new Date().toLocaleString()
-      }
-    });
+    console.log('Home -- finalize');
   }
 };
 
