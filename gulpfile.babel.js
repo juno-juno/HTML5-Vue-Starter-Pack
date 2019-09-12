@@ -36,6 +36,7 @@ import babel from 'rollup-plugin-babel';
 import { uglify } from "rollup-plugin-uglify";
 import replace from 'rollup-plugin-replace';
 import vue from 'rollup-plugin-vue';
+import strip from 'rollup-plugin-strip';
 
 // Dev
 import browserSync from "browser-sync";
@@ -164,6 +165,7 @@ export const scripts = async () => {
         runtimeHelpers: true,
       }),
       PRODUCTION ? uglify() : '',
+      PRODUCTION ? strip({debugger: true, sourceMap: false }) : ''
     ]
   });
 
