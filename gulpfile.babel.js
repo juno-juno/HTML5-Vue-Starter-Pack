@@ -106,11 +106,11 @@ export const sprites = async () => {
     }
   }));
 
-  const imgStream = spriteData.img
+  const imgStream = await spriteData.img
     .pipe(buffer())
     .pipe(dest('./assets/images/'));
 
-  const cssStream = spriteData.css
+  const cssStream = await spriteData.css
     .pipe(dest('./assets/styles/mixins/'));
 
   return merge(imgStream, cssStream)
@@ -178,13 +178,15 @@ export const scripts = async () => {
 }
 
 // Clean
-export const clean = async () => del([
-  './www/fonts',
-  './www/icons',
-  './www/css',
-  './www/img',
-  './www/js',
-]);
+export const clean = async () => {
+  await del([
+    './www/fonts',
+    './www/icons',
+    './www/css',
+    './www/img',
+    './www/js',
+  ])
+};
 
 // Watch Task
 export const watchForChanges = async () => {
@@ -199,20 +201,16 @@ export const watchForChanges = async () => {
 
 // Server & Reload
 const server = browserSync.create();
-export const serve = done => {
+export const serve = async () => {
   server.init({
     server: "./www",
-    // proxy: "localhost:8888"
   });
-  done();
 };
-export const reload = done => {
+export const reload = async () => {
   server.reload(); // for reaload page
-  done();
 };
-export const stream = done => {
+export const stream = async () => {
   server.stream(); // for inject changes
-  done();
 };
 
 // Development Task
