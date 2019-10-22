@@ -1,3 +1,6 @@
+import Vue from 'vue/dist/vue.esm';
+import DemoTemplate from '../../templates/demo-template.vue';
+
 export default {
   init() {
 
@@ -9,6 +12,11 @@ export default {
     new Vue({
       el: '#only-homepage',
       template: '<h3>This is vue template</h3>'
+    });
+
+    new Vue({
+      el: '#only-homepage-template',
+      ...DemoTemplate
     });
 
   },

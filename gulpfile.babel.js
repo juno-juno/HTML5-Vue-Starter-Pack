@@ -29,11 +29,10 @@ const fontName = 'HSPFont';
 // Scripts
 // import { rollup } from 'rollup';
 const rollup = require('rollup');
-const alias = require('rollup-plugin-alias')
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from "rollup-plugin-commonjs";
 import babel from 'rollup-plugin-babel';
-import { uglify } from "rollup-plugin-uglify";
+import minify from 'rollup-plugin-babel-minify';
 import replace from 'rollup-plugin-replace';
 import vue from 'rollup-plugin-vue';
 import strip from 'rollup-plugin-strip';
@@ -164,7 +163,7 @@ export const scripts = async () => {
         exclude: 'node_modules/**',
         runtimeHelpers: true,
       }),
-      PRODUCTION ? uglify() : '',
+      PRODUCTION ? minify({ comments: false, sourceMap: false }) : '',
       PRODUCTION ? strip({debugger: true, sourceMap: false }) : ''
     ]
   });
