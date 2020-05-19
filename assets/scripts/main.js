@@ -1,5 +1,8 @@
 import Vue from 'vue/dist/vue.esm';
+import { BootstrapVue } from 'bootstrap-vue/esm/index.js';
 import ComponentA from './components/ComponentA.vue';
+
+Vue.use(BootstrapVue)
 
 new Vue({
   el: '#app',
