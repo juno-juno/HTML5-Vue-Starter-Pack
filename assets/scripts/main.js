@@ -1,15 +1,18 @@
-// import local dependencies
-import Router from './util/Router';
-import common from './routes/common';
-import home from './routes/home';
+import Vue from 'vue/dist/vue.esm';
+import ComponentA from './components/ComponentA.vue';
 
-/** Populate Router instance with DOM routes */
-const routes = new Router({
-  // All pages
-  common,
-  // Homepage
-  home
+new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  },
+  components: {
+    ComponentA
+  },
+  mounted () {
+    console.log('app loaded');
+
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+  }
 });
-
-// Load Events
-document.addEventListener("DOMContentLoaded", () => routes.loadEvents());

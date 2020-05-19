@@ -83,7 +83,7 @@ export const styles = async () => {
 // Images
 export const images = async () => {
   return src(`${sources.images}`)
-    .pipe(gulpif(PRODUCTION, imagemin()))
+    .pipe(gulpif(PRODUCTION, imagemin())) //  Problem? run: npm rebuild jpegtran-bin
     .pipe(dest('www/img'))
     .pipe(server.stream());
 }
@@ -140,22 +140,24 @@ export const fonts = async () => {
     .pipe(server.stream());
 }
 
-// Vendor scripts
-export const vendorScripts = async () => {
-  return src([
-    './node_modules/vue/dist/vue.min.js'
-  ])
-    .pipe(dest('www/js/vendor'))
-}
-
 // Scripts
 export const scripts = async () => {
   const bundle = await rollup.rollup({
     input: `${sources.scripts}`,
     plugins: [
-      vue(),
+      vue({
+        needMap: PRODUCTION ? false : true,
+        style: {
+          postcssPlugins: PRODUCTION ? [autoprefixer, cssnano] : [autoprefixer],
+          // preprocessOptions: {
+          //   scss: {
+          //     includePaths: ['node_modules']
+          //   }
+          // }
+        },
+      }),
       replace({
-        'process.env.NODE_ENV': JSON.stringify( 'production' )
+        'process.env.NODE_ENV': JSON.stringify( PRODUCTION ? 'production' : 'development' )
       }),
       resolve(),
       commonjs(),
@@ -164,14 +166,13 @@ export const scripts = async () => {
         runtimeHelpers: true,
       }),
       PRODUCTION ? minify({ comments: false, sourceMap: false }) : '',
-      PRODUCTION ? strip({debugger: true, sourceMap: false }) : ''
+      PRODUCTION ? strip({ debugger: true, sourceMap: false }) : ''
     ]
   });
 
   await bundle.write({
     file: './www/js/bundle.js',
     format: 'esm',
-    // name: 'library',
     sourcemap: PRODUCTION ? false : true
   });
 }
@@ -194,7 +195,7 @@ export const watchForChanges = async () => {
   watch(`${sources.sprites}`, series(sprites));
   watch(`${sources.icons}`, series(icons));
   watch(`${sources.fonts}`, series(fonts, reload));
-  watch(`${dirs.src}/scripts/**/*.js`, series(scripts, reload));
+  watch(`${dirs.src}/scripts/**/*.{js,vue}`, series(scripts, reload));
   watch("./www/**/*.html", reload);
 }
 
@@ -213,10 +214,10 @@ export const stream = async () => {
 };
 
 // Development Task
-export const dev = series(clean, sprites, icons, vendorScripts, parallel(styles, images, scripts, fonts), serve, watchForChanges);
+export const dev = series(clean, sprites, icons, parallel(styles, images, scripts, fonts), serve, watchForChanges);
 
 // Production Task
-export const build = series(clean, sprites, icons, vendorScripts, parallel(styles, images, scripts, fonts));
+export const build = series(clean, sprites, icons, parallel(styles, images, scripts, fonts));
 
 // Default task
 export default dev;
